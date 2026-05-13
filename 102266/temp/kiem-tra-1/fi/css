@@ -1,0 +1,184 @@
+Cascading Style Sheets (CSS)
+- CSS, CSS3, CSS4(draft)
+
+Cách khai báo để sử dụng CSS:
+Cách 1: Nhúng trong nội dung của file HTML sử dụng thẻ style
+<style>
+    // Nội dung CSS
+</style>
+
+Cách 2: Sử dụng một từ một tệp tin (file) sử dụng thẻ link với thuộc tính rel="stylesheet": 
+<link rel="stylesheet" href="path/to/file.css">
+
+Mỗi thẻ HTML có thuộc tính:
+    + id: Chỉ số định danh cho thẻ cần duy nhất trong tệp tin (nội dung trang web) HTML.
+    + style: định dạng thẻ (VD: màu chữ, màu nền, phông chữ, ...)
+    + class: lớp định dạng được khai báo trong CSS.
+    
+VD: Thuộc tính class của một thẻ:
+<div class="lop1 lop2 lop3">Nội dung trong thẻ div</div>
+
+
+Lựa chọn trong CSS (selectors)
+1.Lựa chọn theo lớp:
+.class-name
+
+VD:
+.btn-submit
+.input-name
+
+2.Lựa chọn theo tên thẻ:
+tag-name
+
+VD:
+div
+h1
+
+3. Lựa chọn theo id của thẻ:
+#id
+
+VD:
+#input-a-1
+
+Khai báo định dạng:
+selectors {
+    // Nội dung CSS để định dạng
+    property1: value1;
+    property2: value2;
+    property3: value3;
+}
+
+VD:
+div {
+    color: cyan;
+}
+
+.btn-submit {
+    color: #FF0000;
+}
+
+Thuộc tính định dạng:
+Màu chữ (màu phần nội dung) sử dụng thuộc tính "color":
+color: ma_mau;
+
+Các định nghĩa (khai báo) màu:
+1. Sử dụng hệ màu RGB:
+    rgb(r_val, g_val, b_val);
+    Trong đó r_val, g_val, b_val là giá trị từ 0 - 255;
+    
+    rgba(r, g, b, a)
+    a nhận giá trị là số 0-1;
+
+2. Khai báo sử dụng số thập lục (Hexa)
+    #RRGGBB
+    RR: màu đỏ
+    GG: green
+    BB: blue
+    
+3. Khai báo sử dụng hệ màu HSL, HSLA (hỗ trợ trong CSS3)
+    hsl(h, s, l);
+    
+Khai báo về màu nền:
+background-color: color;
+
+Khai báo kích thước:
+width: chiều_rông;
+height: chiều_cao;
+min-width: min_width;
+max-width: max_width;
+min-height: min_height;
+max-height: max_height;
+
+
+Các đơn vị:
+    px: pixel
+    %: kích thước tương đối
+    em: kích thước phụ thuộc vào font chữ.
+
+
+Box model:
+  Mỗi phần tử hay tag HTML giống như một khối (box) và gồm các phần:
+    - Nội dung - content
+    - Padding
+    - Border
+    - Margin
+
+Cách sử dụng:
+1. Margin:
+  margin: top right bottom left;
+
+  VD:
+    margin: 10px 20px 30px 40px;
+    Cách cạnh trên (top): 10px
+    Cách cạnh phải (right): 20px
+    Cách cạnh dưới (bottom): 30px
+    Cách cạnh trái (left): 40px
+    
+  Thay đổi giá trị cho từng cạnh: 
+  margin-left: left;
+  margin-right: right;
+  margin-top: top;
+  margin-bottom: bottom;
+
+2. Padding:
+  padding: top right bottom left;
+  
+  VD: padding: 10px 20px 30px 40px;
+  Padding cạnh trên (top): 10px;
+  Padding cạnh phải (right): 20px;
+  Padding cạnh dưới (bottom): 30px;
+  Padding cạnh trái (left): 40px;
+  
+  Thay đổi padding cho từng cạnh:
+  padding-left: left;
+  padding-right: right;
+  padding-bottom: bottom;
+  padding-top: top;
+  
+3. Border
+  border: type size color;
+  
+  VD: border: solid 5px red;
+  Đường bao dạng liền (solid)
+  Có kích thước: 5px
+  Màu: đỏ
+  
+Kích thước phần tử (box) sẽ bằng:
+  Content + padding + border + margin;
+  
+Bình thường:
+  Content sẽ có kích thước phụ thuộc vào nội dung bên trong.
+Định nghĩa bằng: height, width mặc định sẽ định nghĩa kích thước phần nội dung (content)
+
+Trường hợp viết padding và margin các cạnh giống nhau:
+VD: margin: 10px
+  Tất cả các cạnh đều có margin giống nhau là 10 px
+  
+  padding: 10px;
+  Tất cả các cạnh đều có padding giống nhau là 10px
+  
+Thuộc tính:
+ box-sizing: box-type;
+ box-type:
+  1. content-box: Giá trị mặc định (kích thước định nghĩa là của phần nội dung - content)
+  2. border-box: định nghĩa kích thước của phần đường viền (border);
+        height = height(content) + padding_top + padding_bottom + 2*border_size;
+        
+        width = width(content) + padding_right + padding_left + 2*border_size;
+
+        
+Cách sắp xếp các phần tử liên tiếp:
+display: inline/block/inline-block;
+
+inline, inline-block: các phần tử nằm cạnh nhau sẽ ở dùng một dòng
+block: mỗi phần tử ở một dòng
+
+
+
+  
+
+
+
+
+
+

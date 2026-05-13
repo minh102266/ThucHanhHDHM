@@ -1,0 +1,171 @@
+Thiết lập cấu hình cho router:
+1. Thiết lập địa chỉ cho các cổng (interface):
+    Router(config)# interface if_name
+    Router(config-if)# ip address ip_addr netmask
+    ip_addr: Là địa chỉ IP của cổng mạng.
+    netmask: Là mặt nạ tương ứng với địa chỉ IP.
+    
+    Thiết lập cổng mạng ở chế độ tự nhận địa chỉ qua giao thức DHCP
+    Router(config-if)# ip address dhcp
+2. Bật tắt một cổng (interface) tương tự như switch, tuy nhiên mặc định các cổng trên router ở trạng thái tắt.
+    Tắt một cổng mạng:
+    Router(config-if)# shutdown
+    
+    Bật một cổng mạng:
+    Router(config-if)# no shutdown
+
+Ví dụ: PC0(Gig0/0) và PC1(Gig0/1) kết nối tới Router
++ PC0: 192.168.1.2/255.255.255.0
++ PC1: 192.168.2.2/255.255.255.0
+Trên router:
+Gig0/0: 192.168.1.1/255.255.255.0
+Gig0/1: 192.168.2.1/255.255.255.0
+
+Router(config)#interface Gig0/0
+Router(config-if)#ip address 192.168.1.1 255.255.255.0
+Router(config-if)#exit
+Router(config)#interface Gig0/0
+Router(config-if)#no shut
+Router(config-if)#exit
+Router(config)#interface Gig0/1
+Router(config-if)#ip address 192.168.2.1 255.255.255.0
+Router(config-if)#no shutdown
+
+Thử ping từ router tới PC0 và PC1
+Router#ping 192.168.2.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.2.2, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/1 ms
+
+Router#ping 192.168.1.2
+
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 192.168.1.2, timeout is 2 seconds:
+.!!!!
+Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/1 ms
+
+Thử thực hiện ping từ PC0 đến PC1
+C:\>ping 192.168.2.2
+
+Pinging 192.168.2.2 with 32 bytes of data:
+
+Request timed out.
+Request timed out.
+Request timed out.
+Request timed out.
+
+Thiết lập Default Gateway cho PC0:
+    192.168.1.1 (địa chỉ router cùng mạng với PC0)
+Thiết lập Default Gateway cho PC1:
+    192.168.2.1 (địa chỉ router cùng mạng với PC1)
+    
+Thử kết nối lại giữa PC0 và PC1:
+C:\>ping 192.168.2.2
+
+Pinging 192.168.2.2 with 32 bytes of data:
+
+Reply from 192.168.2.2: bytes=32 time=1ms TTL=127
+Reply from 192.168.2.2: bytes=32 time<1ms TTL=127
+Reply from 192.168.2.2: bytes=32 time<1ms TTL=127
+Reply from 192.168.2.2: bytes=32 time<1ms TTL=127
+
+Ping statistics for 192.168.2.2:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+    
+3. Cấu hình sub interface cho router
+    Router(config)# interface if_name.idx
+    Router(config-subif)#
+    
+    if_name là tên của cổng mạng (giống tên cổng vật lý).
+    idx là một số thể hiện cho sub interface
+    
+    + Thiết lập VLAN cho sub interface:
+        Router(config-subif)# encapsulation dot1Q VLAN-ID
+        
+        VD: Thiết lập subif cho VLAN 2
+        Router(config-subif)# encapsulation dot1Q 2
+    + Sub interface có thể thiết lập về địa chỉ IP như interface thường.
+        VD:Router(config-subif)# ip address 10.0.0.1 255.255.0.0
+Lưu ý: Để sub interface có thể sử dụng được (truyền dữ liệu) thì bản thân interface (vật lý) cũng phải ở trạng thái bật.
+
+VD: Sử dụng router để định tuyến giữa các VLAN (kết nối các VLAN)
+PC0 thuộc VLAN 10
+PC1 thuộc VLAN 20
+Router kết nối với Switch thông qua Gig0/0 (router) tới Gig0/1(switch)
+
+Thiết lập địa chỉ cho các thiết bị:
+PC0: 192.168.10.2/255.255.255.0
+    Default Gateway 192.168.10.1
+PC1: 192.168.20.2/255.255.255.0
+    Default Gateway 192.168.20.1
+Fa0/1(PC0): access, vlan 10
+Fa0/2(PC1): access, vlan 20
+Gig0/1(Kết nối tới router): trunk, allowed vlan 10,20
+
+Trên Router:
+Gig0/0.10: VLAN 10
+    192.168.10.1/255.255.255.0
+Gig0/0.20: VLAN 20
+    192.168.20.1/255.255.255.0
+    
+Trên switch:
+Switch(config)#vlan 10
+Switch(config-vlan)#name VLAN10
+Switch(config-vlan)#vlan 20
+Switch(config-vlan)#name VLAN20
+Switch(config-vlan)#exit
+Switch(config)#interface Fa0/1
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 10
+Switch(config-if)#interface Fa0/2
+Switch(config-if)#switchport mode access
+Switch(config-if)#switchport access vlan 20
+Switch(config-if)#exit
+Switch(config)#interface Gig0/1
+Switch(config-if)#switchport mode trunk 
+Switch(config-if)#switchport trunk allowed vlan 10,20
+
+Trên Router:
+Router(config)#interface Gig0/0
+Router(config-if)#no shutdown
+
+Router(config-if)#exit
+Router(config)#interface Gig0/0.10
+Router(config-subif)#encapsulation dot1Q 10
+Router(config-subif)#ip address 192.168.10.1 255.255.255.0
+Router(config)#interface Gig0/0.20
+Router(config-subif)#encapsulation dot1Q 20
+Router(config-subif)#ip address 192.168.20.1 255.255.255.0
+    
+    
+
+
+
+
+
+
+
+        
+        
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

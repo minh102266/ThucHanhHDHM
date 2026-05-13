@@ -1,0 +1,27 @@
+../:
+total 20
+drwxr-xr-x 5 codespace codespace 4096 May 13 07:14 .
+drwxr-xr-x 6 codespace codespace 4096 May 13 07:14 ..
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 tc1
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 tc2
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 tc3
+
+../tc1:
+total 12
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 .
+drwxr-xr-x 5 codespace codespace 4096 May 13 07:14 ..
+-rw-r--r-- 1 codespace codespace    0 May 13 07:14 .gitkeep
+-rw-r--r-- 1 codespace codespace    0 May 13 07:14 result.log
+-r--r----- 1 codespace codespace   73 May 13 07:14 yeu-cau.txt
+
+../tc2:
+total 8
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 .
+drwxr-xr-x 5 codespace codespace 4096 May 13 07:14 ..
+-rw-r--r-- 1 codespace codespace    0 May 13 07:14 .gitkeep
+
+../tc3:
+total 8
+drwxr-xr-x 2 codespace codespace 4096 May 13 07:14 .
+drwxr-xr-x 5 codespace codespace 4096 May 13 07:14 ..
+-rw-r--r-- 1 codespace codespace    0 May 13 07:14 .gitkeep

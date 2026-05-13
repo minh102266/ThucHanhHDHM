@@ -1,0 +1,124 @@
+Thiết bị đầu cuối (máy tính, điện thoại, ...) luôn có các thiết lập:
+Địa chỉ mạng (IP address): Dùng để nhận điện thiết bị (host)
+Mặt nạ (Netmask/Subnetmask): xác định mạng (xác phần Network ID từ địa chỉ mạng).
+
+Ví dụ: Trong ngôn ngữ C:
+Toán tử bit (bitwise):
+& (AND), | (OR)
+Có biến ip (địa chỉ IP - 32 bit - 4 byte), netmask (mặt nạ, 32 bit)
+network = ip & netmask
+
+Các địa chỉ mạng (IP address) của các thiết bị khác nhau sau khi thực hiện phép toán AND với netmask/subnetmask cho ra kết quả giống nhau thì thuộc cùng một mạng.
+
+Giao thức ARP: xác định địa chỉ MAC từ địa chỉ IP (IP -> MAC).
+RARP: Xác định địa chỉ IP khi biết địa chỉ MAC (MAC -> IP).
+
++ Nếu địa chỉ đích (IP) nằm cùng mạng với thiết bị gửi gói tin. Máy tính xác định địa chỉ MAC tương ứng với địa chỉ đích (IP) thông qua giao thức ARP.
++ Nếu địa chỉ đích (IP) nằm khác mạng với thiết bị gửi gói tin. Máy tính sẽ gửi gói tin tới bộ định tuyến (dựa theo thông tin định tuyến) - thường là địa chỉ default gateway. Địa chỉ vật lý gửi đến (MAC đích là của default gateway) - Địa chỉ IP đích vẫn là địa chỉ gói tin cần gửi đến. ARP sử dụng để xác định địa chỉ MAC của IP tương ứng với Default Gateway.
+
+
+Ví dụ: truy cập dịch vụ web (VD: http://vimaru.edu.vn) từ trình duyệt.
+DNS: chuyển đổi tên miền thành địa chỉ IP (vimaru.edu.vn -> 203.162.246.101)
+Một số loại bản ghi giao thức DNS thường dùng:
++ A: chuyển đổi tên miền thành địa chỉ IPv4
++ AAAA: chuyển đổi tên miền thành địa chỉ IPv6
++ MX: bản ghi về địa chỉ máy chủ mail (địa chỉ IP của máy chủ email).
++ CNAME: trỏ đến 1 tên miền khác.
++ PTR: bản ghi ngược dùng để xác định tên miền từ địa chỉ IP.
++ TXT: Chứa thông tin dạng text (chuỗi ký tự) tương ứng với tên miền.
++ NS: địa chỉ máy chủ tên miền.
+
+
+
+
+
+
+Switch: hoạt động ở lớp 2, chỉ hiểu được địa chỉ MAC, hoạt động dựa trên địa chỉ MAC của gói tin.
+
+Router (bộ định tuyến): hoạt động ở lớp 3, hoạt động dựa theo địa chỉ IP.
+
+
+
+
+Một số thông số thường được thiết lập (trong hầu hết các trường hợp)
++ Default route (default router, router, default gateway): địa chỉ của bộ định tuyến mặc định mà gói tin sẽ gửi đến.
++ Domain name server (DNS): địa chỉ của máy chủ phân giải tên miền
+
+
+
+
+
+
+
+
+Các thiết bị nào cần có địa chỉ IP để hoạt động?
+PC, Router cần có địa chỉ IP để hoạt động.
+NIC (card mạng): dùng để kết nối vào mạng. Mỗi card mạng có địa chỉ vật lý (MAC) duy nhất và không đổi.
+Lưu ý:
++ Mỗi cổng kết nối trên switch không có địa chỉ vật lý riêng.
++ Với bộ định tuyến mỗi cổng/giao điện tương ứng với một card mạng.
+Đặt địa mạng chỉ phù hợp cho các thiết bị (từng giao diện với router).
+Yêu cầu sử dụng khối địa chỉ 192.168.100.0/24.
+
+Sơ đồ trong hình vẽ gồm 3 mạng, mỗi mạng cần có 3 địa chỉ để đánh cho các giao diện mạng/thiết bị.
+
+Nếu mượn 2 bit thì có 4 mạng con:
+192.168.100.0/26, 192.168.100.64/26, 192.168.100.128/26, 192.168.100.192/26
+
+
+Yêu cầu: sử dụng khối địa chỉ 192.168.212.0/24 chia thành các mạng phù hợp để đặt địa chỉ cho các thiết bị trong sơ đồ mạng.
+NET1: 192.168.212.0/26
+NET2: 192.168.212.64/27, NET5: 192.168.212.96/27
+NET3: 192.168.212.128/26
+NET4: 192.168.212.192/26
+
+Sử dụng khối địa chỉ 192.168.212.0/27 để chia thành 5 mạng con thỏa mãn yêu cầu sau:
+NET1: 4 Host, /29, 192.168.212.0/29
+NET2: 3 Host, /29, 192.168.212.8/29
+NET3: 3 Host, /29, 192.168.212.16/29
+                   192.168.212.24/29
+NET4: 2 Host, /30,   192.168.212.24/30
+NET5: 2 Host, /30,   192.168.22.28/30
+
+____________
+Giả thết rằng:
++ NET1 có 100 máy tính -> 101 địa chỉ (host) -> 192.168.21.0/25
++ NET3 có 30 máy chủ (server) -> 31 địa chỉ (host) -> 192.168.21.128/26
++ NET4 có 10 máy chủ (server) -> 11 địa chỉ (host) -> 192.168.21.192/28
+Hãy sử dụng khối địa chỉ 192.168.21.0/24 để chia thành các mạng con phù hợp với mô hình ở trên.
++ NET2 -> 3 địa chỉ -> 192.168.21.208/29
++ NET5 -> 2 địa chỉ -> 192.168.21.216/30
++ Nếu có thêm vùng NET6 với 29 máy tính cần chỉnh sửa việc chia mạng lại như thế nào? -> 30 địa chỉ (host) -> 192.168.21.224/27
+__
+Cần khối địa chỉ có kích thước nhỏ nhất nào để có thể chia được thành các mạng con cho sơ đồ ở trên?
+300PC - 301 địa chỉ - /23
+200PC - 201 địa chỉ - /24
+500PC - 501 địa chỉ - /23
+61xServer - 63 địa chỉ - /25
+61PC - 62 địa chỉ - /26
+2 mạng kết nối router
+4 địa chỉ - /29
+4 địa chỉ - /29
+
+/29 + /29 -> /28
++ /26 -> /25
++ /25 -> /24
++ /24 -> /23
++ /23 + /23 -> /21
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+- Sử nhiều kết nối vật lý như một kết nối logic.
+    + Tên gọi:
+        * EtherChannel (switch)
+        * Port-Group (switch)
+        * NIC Teaming (Server)
+        * Bonding (Server)
+    + Các chuẩn/ giao thức:
+        * PAgP - giao thức riêng của Cisco - có mặt trên các thiết bị Cisco.
+        * LACP - giao thức thuộc tổ chức IEEE có mặt trên hầu hết các thiết bị.
+    + Mục đích:
+        * Tăng thông lượng (throughput) của kết nối giữa 2 thiết bị.
+        * Tạo ra tính dự phòng: một số kết nối bị sự cố thì các kết nối còn lại trong nhóm sẽ hoạt động thay thế và kết nối logic vẫn hoạt động bình thường.
+- Thực hiện cấu hình EtherChannel:
+    + B1: Chọn các cổng cần cấu hình vào một nhóm trong (EtherChannel).
+        SW(config)# interface range if_range
+        SW(config-if-range)#
+    + B2: Thiết lập EtherChannel cho các cổng này.
+        SW(config-if-range)# channel-group group-id mode mode_name
+        
+        Trong đó: group-id: Là chỉ số nhóm (bắt đầu từ 1).
+        mode_name là chế độ:
+            PAgP: desirable, auto
+            LACP: passive, active
+    + B3: Thực hiện cấu hình cho cổng logic tương tự như cổng thông thường (cấu hình về VLAN nếu cần)
+        Tên cổng logic có dạng Port-channel group-id.
+        VD: SW(config)# interface Port-channel 1
+            SW(config-if)#
+            
+VD: SW0 và SW1 kết nối với nhau thông qua 2 kết nối:
+    SW0(Gig0/1) <---> SW1(Gig0/1)
+    SW0(Gig0/2) <---> SW1(Gig0/2)
+    
+Thiết lập EtherChannel giữa SW0 và SW1:
+Cấu hình Gig0/1, Gig0/2 trên SW0 vào nhóm 1
+SW0(config)#interface range Gig0/1-2
+SW0(config-if-range)#channel-group 1 mode desirable
+
+Cấu hình cho cổng logic 1 về chế độ trunk
+SW0(config)#interface Port-channel 1
+SW0(config-if)#switchport mode trunk
+
+Cấu hình Gig0/1, Gig0/2 trên SW1 vào nhóm 1
+SW1(config)#interface range Gig0/1-2
+SW1(config-if-range)#channel-group 1 mode auto
+
+Cấu hình cho cổng logic 1 về chế độ trunk
+SW1(config)#interface Po1
+SW1(config-if)#switchport mode trunk
+
+Để xem thông tin thiết lập EtherChannel dùng lệnh:
+SW1#show etherchannel summary 
+Flags:  D - down        P - in port-channel
+        I - stand-alone s - suspended
+        H - Hot-standby (LACP only)
+        R - Layer3      S - Layer2
+        U - in use      f - failed to allocate aggregator
+        u - unsuitable for bundling
+        w - waiting to be aggregated
+        d - default port
+
+
+Number of channel-groups in use: 1
+Number of aggregators:           1
+
+Group  Port-channel  Protocol    Ports
+------+-------------+-----------+----------------------------------------------
+
+1      Po1(SU)           PAgP   Gig0/1(P) Gig0/2(P)
+
+
+
+    
+    
+    
+    

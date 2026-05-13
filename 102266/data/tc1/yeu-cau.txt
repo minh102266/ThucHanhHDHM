@@ -1,0 +1,1 @@
+1. Tao thu muc MSV. 2. Tao lien ket working. 3. Tao tep tin yeu-cau.txt.
